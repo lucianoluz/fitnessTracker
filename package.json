@@ -1,0 +1,10 @@
+{
+  "name": "workout-tracker",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Installable PWA to track workouts by tapping a 3D body model.",
+  "comment": "No build step. Three.js is vendored under vendor/three/ for offline use; this manifest just records the source version.",
+  "dependencies": {
+    "three": "^0.160.0"
+  }
+}

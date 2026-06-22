@@ -37,6 +37,14 @@ Then open http://localhost:8000 in Chrome. The page should say
 | `sw.js` | Cache-first offline service worker |
 | `icons/` | Home-screen icons (192, 512, maskable) |
 
+## Credits
+
+- 3D model: **“Free Pack – Male Base Mesh”** by *DuNguyn* (Sketchfab), licensed
+  **[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)**. Source:
+  https://sketchfab.com/3d-models/free-pack-male-base-mesh-44b8e235695442fab39b4439a1588618
+- 3D rendering via **[three.js](https://threejs.org/)** (MIT), vendored under
+  `vendor/three/` so the app works offline.
+
 ## Verify it's installable
 
 Chrome DevTools → **Application** tab:
