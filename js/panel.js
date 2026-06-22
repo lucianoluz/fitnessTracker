@@ -1,8 +1,7 @@
-// Feature 1: tappable body diagram.
-// Wires each SVG .zone to open the panel listing the exercises tagged to that
-// muscle group. Exercise data comes from js/exercises.js. (Logging inputs are
-// added in Feature 2 — for now each exercise shows its current working numbers.)
-(function () {
+// Exercise panel (bottom sheet) — shared UI used by the 3D body viewer.
+// Exposes window.Panel.open(muscle) / window.Panel.close(). An optional
+// onClose callback lets the viewer clear its highlight when the sheet closes.
+const Panel = (function () {
   'use strict';
 
   const panel = document.querySelector('.panel');
@@ -10,7 +9,8 @@
   const panelTitle = document.getElementById('panel-title');
   const panelBody = panel.querySelector('.panel-body');
   const closeBtn = panel.querySelector('.panel-close');
-  const zones = Array.from(document.querySelectorAll('.zone'));
+
+  let onCloseCb = null;
 
   function escapeHtml(str) {
     return String(str).replace(/[&<>"']/g, (c) => ({
@@ -36,48 +36,47 @@
     `).join('');
   }
 
-  function openPanel(muscle) {
+  function open(muscle) {
     panelTitle.textContent = MUSCLE_LABELS[muscle] || 'Exercises';
     renderExercises(muscle);
     backdrop.hidden = false;
     panel.hidden = false;
     panel.setAttribute('aria-hidden', 'false');
-    // Defer the open class one frame so the slide-up transition runs.
     requestAnimationFrame(() => {
       backdrop.classList.add('open');
       panel.classList.add('open');
     });
-    zones.forEach((z) => z.classList.toggle('is-selected', z.dataset.muscle === muscle));
   }
 
-  function closePanel() {
+  function close() {
     backdrop.classList.remove('open');
     panel.classList.remove('open');
     panel.setAttribute('aria-hidden', 'true');
-    zones.forEach((z) => z.classList.remove('is-selected'));
-    // Hide after the transition so it's not focusable while off-screen.
     const onEnd = () => {
       panel.hidden = true;
       backdrop.hidden = true;
       panel.removeEventListener('transitionend', onEnd);
     };
     panel.addEventListener('transitionend', onEnd);
+    if (onCloseCb) onCloseCb();
   }
 
-  zones.forEach((zone) => {
-    const activate = () => openPanel(zone.dataset.muscle);
-    zone.addEventListener('click', activate);
-    zone.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        activate();
-      }
-    });
+  function isOpen() {
+    return !panel.hidden;
+  }
+
+  closeBtn.addEventListener('click', close);
+  backdrop.addEventListener('click', close);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isOpen()) close();
   });
 
-  closeBtn.addEventListener('click', closePanel);
-  backdrop.addEventListener('click', closePanel);
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !panel.hidden) closePanel();
-  });
+  return {
+    open,
+    close,
+    isOpen,
+    onClose(cb) { onCloseCb = cb; },
+  };
 })();
+
+window.Panel = Panel;

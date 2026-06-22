@@ -48,70 +48,52 @@ body {
   font-size: 0.9rem;
 }
 
-/* --- Body diagram screen --- */
-.diagram-screen {
+/* --- 3D body screen --- */
+.model-screen {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 16px;
+  padding: 12px 16px;
+  min-height: 0;
 }
 
 .hint {
   color: var(--muted);
   font-size: 0.95rem;
-  margin: 4px 0 12px;
+  margin: 4px 0 8px;
   text-align: center;
 }
 
-.body {
+#model-container {
+  flex: 1;
   width: 100%;
-  max-width: 320px;
-  height: auto;
+  min-height: 0;
+  position: relative;
+  /* Let the viewer own touch gestures (drag to rotate) without page scroll. */
+  touch-action: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.body .figure circle,
-.body .figure rect,
-.body .figure ellipse {
-  fill: #21262d;
+#model-container canvas {
+  display: block;
 }
 
-.body .zone {
-  fill: #30363d;
-  stroke: #484f58;
-  stroke-width: 1;
-  cursor: pointer;
-  transition: fill 0.12s ease, stroke 0.12s ease;
-}
-
-/* Hover only on devices that actually hover (avoids sticky state on touch). */
-@media (hover: hover) {
-  .body .zone:hover {
-    fill: #2d4a7c;
-    stroke: var(--accent);
-  }
-}
-
-.body .zone:focus-visible {
-  outline: none;
-  fill: #2d4a7c;
-  stroke: var(--accent);
-  stroke-width: 2;
-}
-
-.body .zone:active,
-.body .zone.is-selected {
-  fill: var(--accent);
-  stroke: #5a9bff;
-}
-
-.body .zone-labels text {
-  fill: var(--text);
-  font-size: 9px;
-  font-weight: 600;
-  text-anchor: middle;
+#model-loading {
+  position: absolute;
   pointer-events: none;
-  user-select: none;
+}
+
+.credit {
+  font-size: 0.72rem;
+  margin: 6px 0 0;
+  text-align: center;
+}
+
+.credit a {
+  color: var(--muted);
 }
 
 /* --- Footer --- */
