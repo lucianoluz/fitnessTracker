@@ -16,6 +16,7 @@
       t.setAttribute('aria-selected', on ? 'true' : 'false');
     });
     if (name === 'history' && window.History) History.show();
+    if (name === 'session' && window.Session) Session.show();
     if (name === 'body') window.dispatchEvent(new Event('resize'));
   }
 

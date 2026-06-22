@@ -39,13 +39,14 @@
         </footer>
       </section>
 
-      <!-- Session: batch "today's workout" screen (built in Phase C) -->
+      <!-- Session: batch "today's workout" screen -->
       <section class="session-screen screen" data-screen="session" hidden>
         <header class="screen-header">
           <h2 class="screen-title">Today’s Session</h2>
         </header>
-        <div class="screen-pad">
-          <p class="muted">Batch logging is coming next. For now, log exercises from the Body tab and review them in History.</p>
+        <div class="session-body"></div>
+        <div class="session-foot">
+          <button type="button" class="session-save" disabled>Save Session</button>
         </div>
       </section>
 
@@ -99,6 +100,7 @@
   <script src="js/storage.js"></script>
   <script src="js/panel.js"></script>
   <script src="js/history.js"></script>
+  <script src="js/session.js"></script>
   <script type="module" src="js/body3d.js"></script>
   <script src="js/nav.js"></script>
   <script src="js/app.js"></script>
