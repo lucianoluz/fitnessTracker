@@ -11,7 +11,6 @@ const Panel = (function () {
   const closeBtn = panel.querySelector('.panel-close');
 
   let onCloseCb = null;
-  let openedAt = 0;     // timestamp of the last open(), to swallow ghost clicks
 
   function escapeHtml(str) {
     return String(str).replace(/[&<>"']/g, (c) => ({
@@ -43,7 +42,6 @@ const Panel = (function () {
     backdrop.hidden = false;
     panel.hidden = false;
     panel.setAttribute('aria-hidden', 'false');
-    openedAt = Date.now();
     requestAnimationFrame(() => {
       backdrop.classList.add('open');
       panel.classList.add('open');
@@ -68,20 +66,14 @@ const Panel = (function () {
     if (onCloseCb) onCloseCb();
   }
 
-  // A click that arrives right after open() is the synthetic "ghost" click the
-  // browser fires after the tap that opened the sheet (on touch it lands on the
-  // just-revealed backdrop). Ignore it so the sheet doesn't close immediately.
-  function requestClose() {
-    if (Date.now() - openedAt < 400) return;
-    close();
-  }
-
   function isOpen() {
     return !panel.hidden;
   }
 
-  closeBtn.addEventListener('click', requestClose);
-  backdrop.addEventListener('click', requestClose);
+  // The ghost click that follows the opening tap is swallowed at the source in
+  // body3d.js, so these handlers only ever see genuine user closes.
+  closeBtn.addEventListener('click', close);
+  backdrop.addEventListener('click', close);
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && isOpen()) close();
   });
