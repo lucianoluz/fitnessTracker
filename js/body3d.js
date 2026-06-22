@@ -59,7 +59,11 @@ let worldBox = null;      // THREE.Box3 of the final placed model
 function sizeToContainer() {
   const w = container.clientWidth || 1;
   const h = container.clientHeight || 1;
-  renderer.setSize(w, h, false);
+  // updateStyle defaults to true so Three sets the canvas CSS size (w×h),
+  // keeping the drawing buffer (w×dpr) decoupled from layout. Passing false
+  // here let the huge pixel buffer drive layout and caused a resize feedback
+  // loop on high-DPR phones.
+  renderer.setSize(w, h);
   camera.aspect = w / h;
   camera.updateProjectionMatrix();
 }
