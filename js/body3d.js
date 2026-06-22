@@ -216,10 +216,16 @@ renderer.domElement.addEventListener('pointerup', (e) => {
   down = null;
 });
 
-// Keep the muscle highlighted for ~1s after the panel closes, then fade back.
+// Fade the highlight ~1s AFTER the sheet is closed. The tap that opens the
+// sheet fires a follow-up synthetic click on the just-shown backdrop, which
+// briefly re-invokes close() while the panel stays open — so only actually
+// clear if the sheet is still closed when the timer fires.
 Panel.onClose(() => {
   if (revertTimer) clearTimeout(revertTimer);
-  revertTimer = setTimeout(() => { revertTimer = null; clearSelection(); }, 1000);
+  revertTimer = setTimeout(() => {
+    revertTimer = null;
+    if (!Panel.isOpen()) clearSelection();
+  }, 1000);
 });
 
 // --- Render loop ----------------------------------------------------------
