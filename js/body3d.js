@@ -16,7 +16,7 @@ const MODEL_URL = './assets/male-base-mesh.glb';
 const FRONT_Z = 1;
 
 const BASE_COLOR = new THREE.Color(0x9aa4b2);     // unselected body
-const HILITE_COLOR = new THREE.Color(0x1f6feb);   // selected muscle zone
+const HILITE_COLOR = new THREE.Color(0x1e40af);   // selected muscle zone (dark-ish blue)
 // Distinct colors for the debug/calibration overlay.
 const ZONE_DEBUG = {
   core: 0xf0883e, chest: 0x3fb950, shoulders: 0xdb61a2, biceps: 0x58a6ff,
@@ -171,9 +171,12 @@ function setupModel(root) {
 // --- Tap → muscle ---------------------------------------------------------
 const raycaster = new THREE.Raycaster();
 let selected = null;
+let revertTimer = null;   // pending "fade back to base" after the panel closes
 
 function selectMuscle(muscle) {
   if (!muscle || muscle === 'neutral') return;
+  // A new selection cancels any pending revert from the last panel close.
+  if (revertTimer) { clearTimeout(revertTimer); revertTimer = null; }
   selected = muscle;
   paintSelection(muscle);
   Panel.open(muscle);
@@ -213,7 +216,11 @@ renderer.domElement.addEventListener('pointerup', (e) => {
   down = null;
 });
 
-Panel.onClose(() => clearSelection());
+// Keep the muscle highlighted for ~1s after the panel closes, then fade back.
+Panel.onClose(() => {
+  if (revertTimer) clearTimeout(revertTimer);
+  revertTimer = setTimeout(() => { revertTimer = null; clearSelection(); }, 1000);
+});
 
 // --- Render loop ----------------------------------------------------------
 function animate() {
@@ -261,5 +268,16 @@ window.__viewer = {
     const out = {};
     for (let h = 0; h <= 10; h++) out[h / 10] = zoneFor(0.0, h / 10, FRONT_Z);
     return out;
+  },
+  zoneColor(muscle) {
+    // Average current vertex colour over a zone (used to verify highlight state).
+    if (!mesh) return null;
+    const colors = mesh.geometry.getAttribute('color');
+    let r = 0, g = 0, b = 0, n = 0;
+    for (let i = 0; i < colors.count; i++) {
+      if (zonePerVertex[i] !== muscle) continue;
+      r += colors.getX(i); g += colors.getY(i); b += colors.getZ(i); n++;
+    }
+    return n ? { r: r / n, g: g / n, b: b / n, n } : null;
   },
 };
