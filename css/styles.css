@@ -43,22 +43,189 @@ body {
   margin: 16px 0;
 }
 
-.placeholder {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  text-align: center;
-  padding: 24px;
-}
-
-.placeholder p {
-  margin: 0;
-}
-
 .muted {
   color: var(--muted);
   font-size: 0.9rem;
+}
+
+/* --- Body diagram screen --- */
+.diagram-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin: 4px 0 12px;
+  text-align: center;
+}
+
+.body {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+}
+
+.body .figure circle,
+.body .figure rect,
+.body .figure ellipse {
+  fill: #21262d;
+}
+
+.body .zone {
+  fill: #30363d;
+  stroke: #484f58;
+  stroke-width: 1;
+  cursor: pointer;
+  transition: fill 0.12s ease, stroke 0.12s ease;
+}
+
+/* Hover only on devices that actually hover (avoids sticky state on touch). */
+@media (hover: hover) {
+  .body .zone:hover {
+    fill: #2d4a7c;
+    stroke: var(--accent);
+  }
+}
+
+.body .zone:focus-visible {
+  outline: none;
+  fill: #2d4a7c;
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+
+.body .zone:active,
+.body .zone.is-selected {
+  fill: var(--accent);
+  stroke: #5a9bff;
+}
+
+.body .zone-labels text {
+  fill: var(--text);
+  font-size: 9px;
+  font-weight: 600;
+  text-anchor: middle;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* --- Footer --- */
+.app-footer {
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+  border-top: 1px solid #21262d;
+  text-align: center;
+}
+
+/* --- Exercise panel (bottom sheet) --- */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 10;
+}
+
+.backdrop.open {
+  opacity: 1;
+}
+
+.panel {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  width: 100%;
+  max-width: 480px;
+  transform: translate(-50%, 100%);
+  max-height: 80vh;
+  background: var(--panel);
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.4);
+  transition: transform 0.25s ease;
+  z-index: 11;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.panel.open {
+  transform: translate(-50%, 0);
+}
+
+.panel-handle {
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  background: #484f58;
+  margin: 8px auto 0;
+  flex: none;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px 12px;
+  border-bottom: 1px solid #21262d;
+}
+
+.panel-header h2 {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.panel-close {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 1.6rem;
+  line-height: 1;
+  padding: 0 4px;
+  cursor: pointer;
+}
+
+.panel-body {
+  overflow-y: auto;
+  padding: 8px 16px 16px;
+}
+
+.exercise-card {
+  padding: 12px 0;
+  border-bottom: 1px solid #21262d;
+}
+
+.exercise-card:last-child {
+  border-bottom: none;
+}
+
+.exercise-card h3 {
+  font-size: 1rem;
+  margin: 0 0 4px;
+}
+
+.exercise-meta {
+  display: flex;
+  gap: 12px;
+  margin: 0 0 4px;
+  font-size: 0.9rem;
+}
+
+.exercise-meta .weight {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.exercise-meta .reps {
+  color: var(--text);
+}
+
+.exercise-cue {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin: 0;
 }
