@@ -216,16 +216,12 @@ renderer.domElement.addEventListener('pointerup', (e) => {
   down = null;
 });
 
-// Fade the highlight ~1s AFTER the sheet is closed. The tap that opens the
-// sheet fires a follow-up synthetic click on the just-shown backdrop, which
-// briefly re-invokes close() while the panel stays open — so only actually
-// clear if the sheet is still closed when the timer fires.
+// Fade the highlight ~1s after the sheet is closed. Panel swallows the ghost
+// click that follows the opening tap, so onClose only fires on a real close;
+// tapping another muscle cancels a pending fade (see selectMuscle).
 Panel.onClose(() => {
   if (revertTimer) clearTimeout(revertTimer);
-  revertTimer = setTimeout(() => {
-    revertTimer = null;
-    if (!Panel.isOpen()) clearSelection();
-  }, 1000);
+  revertTimer = setTimeout(() => { revertTimer = null; clearSelection(); }, 1000);
 });
 
 // --- Render loop ----------------------------------------------------------
@@ -259,6 +255,7 @@ new GLTFLoader().load(
 // Test/diagnostic hooks (used by the headless verification script).
 window.__viewer = {
   rotateTo(deg) { if (modelRoot) { modelRoot.rotation.y = THREE.MathUtils.degToRad(deg); } },
+  selection() { return selected; },
   debug(on) { if (!mesh) return; on ? paintDebug() : (selected ? paintSelection(selected) : paintBase()); },
   pickNDC(x, y) {
     raycaster.setFromCamera(new THREE.Vector2(x, y), camera);
