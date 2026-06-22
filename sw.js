@@ -1,11 +1,13 @@
 // Workout Tracker service worker — cache-first app shell for offline use.
 // Bump CACHE_VERSION whenever the shell files change so clients pick up updates.
-const CACHE_VERSION = 'wt-shell-v1';
+const CACHE_VERSION = 'wt-shell-v2';
 
 const APP_SHELL = [
   './',
   './index.html',
   './css/styles.css',
+  './js/exercises.js',
+  './js/bodyDiagram.js',
   './js/app.js',
   './manifest.webmanifest',
   './icons/icon-192.png',

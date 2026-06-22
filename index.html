@@ -16,13 +16,92 @@
       <h1>Workout Tracker</h1>
     </header>
 
-    <section class="placeholder">
-      <p>Skeleton ready.</p>
-      <p class="muted">No features yet — this page exists to confirm the app installs and runs offline on your phone.</p>
-      <p id="sw-status" class="muted">Service worker: checking…</p>
+    <section class="diagram-screen">
+      <p class="hint">Tap a muscle group to see its exercises.</p>
+
+      <!-- Schematic front-view body map. Each .zone is tappable and carries a
+           data-muscle key matching js/exercises.js. Labels keep zones clear. -->
+      <svg class="body" viewBox="0 0 220 460" role="group" aria-label="Body muscle map">
+        <!-- Decorative (non-tappable) base figure -->
+        <g class="figure">
+          <circle cx="110" cy="34" r="20" />            <!-- head -->
+          <rect x="103" y="52" width="14" height="14" rx="4" /> <!-- neck -->
+          <rect x="82" y="170" width="56" height="30" rx="10" /> <!-- pelvis -->
+          <ellipse cx="92" cy="372" rx="13" ry="7" />   <!-- left foot -->
+          <ellipse cx="128" cy="372" rx="13" ry="7" />  <!-- right foot -->
+        </g>
+
+        <!-- Tappable muscle zones -->
+        <g class="zones">
+          <!-- Shoulders -->
+          <ellipse class="zone" data-muscle="shoulders" cx="74"  cy="80" rx="17" ry="13" tabindex="0" role="button" aria-label="Shoulders" />
+          <ellipse class="zone" data-muscle="shoulders" cx="146" cy="80" rx="17" ry="13" tabindex="0" role="button" aria-label="Shoulders" />
+
+          <!-- Chest -->
+          <rect class="zone" data-muscle="chest" x="82" y="84" width="56" height="34" rx="10" tabindex="0" role="button" aria-label="Chest" />
+
+          <!-- Back (lats, visible at the sides on a front view) -->
+          <rect class="zone" data-muscle="back" x="66"  y="92" width="14" height="74" rx="6" tabindex="0" role="button" aria-label="Back" />
+          <rect class="zone" data-muscle="back" x="140" y="92" width="14" height="74" rx="6" tabindex="0" role="button" aria-label="Back" />
+
+          <!-- Biceps (upper arms) -->
+          <rect class="zone" data-muscle="biceps" x="44"  y="94"  width="20" height="48" rx="10" tabindex="0" role="button" aria-label="Biceps" />
+          <rect class="zone" data-muscle="biceps" x="156" y="94"  width="20" height="48" rx="10" tabindex="0" role="button" aria-label="Biceps" />
+
+          <!-- Triceps (lower arms / forearm region — schematic) -->
+          <rect class="zone" data-muscle="triceps" x="40"  y="144" width="18" height="46" rx="9" tabindex="0" role="button" aria-label="Triceps" />
+          <rect class="zone" data-muscle="triceps" x="162" y="144" width="18" height="46" rx="9" tabindex="0" role="button" aria-label="Triceps" />
+
+          <!-- Core / abs -->
+          <rect class="zone" data-muscle="core" x="86" y="120" width="48" height="48" rx="10" tabindex="0" role="button" aria-label="Core / Abs" />
+
+          <!-- Legs (thighs) -->
+          <rect class="zone" data-muscle="legs" x="80"  y="202" width="26" height="86" rx="12" tabindex="0" role="button" aria-label="Legs" />
+          <rect class="zone" data-muscle="legs" x="114" y="202" width="26" height="86" rx="12" tabindex="0" role="button" aria-label="Legs" />
+
+          <!-- Calves -->
+          <rect class="zone" data-muscle="calves" x="82"  y="292" width="22" height="72" rx="10" tabindex="0" role="button" aria-label="Calves" />
+          <rect class="zone" data-muscle="calves" x="116" y="292" width="22" height="72" rx="10" tabindex="0" role="button" aria-label="Calves" />
+        </g>
+
+        <!-- Labels (pointer-events disabled so taps fall through to zones) -->
+        <g class="zone-labels">
+          <text x="110" y="103">Chest</text>
+          <text x="110" y="147">Core</text>
+          <text x="73"  y="60">Shldr</text>
+          <text x="147" y="60">Shldr</text>
+          <text x="54"  y="122">Bi</text>
+          <text x="166" y="122">Bi</text>
+          <text x="49"  y="170">Tri</text>
+          <text x="171" y="170">Tri</text>
+          <text x="61"  y="132">Back</text>
+          <text x="159" y="132">Back</text>
+          <text x="93"  y="248">Legs</text>
+          <text x="127" y="248">Legs</text>
+          <text x="93"  y="332">Calf</text>
+          <text x="127" y="332">Calf</text>
+        </g>
+      </svg>
     </section>
+
+    <!-- Exercise list panel (bottom sheet). Hidden until a zone is tapped. -->
+    <div class="backdrop" hidden></div>
+    <aside class="panel" hidden aria-hidden="true" aria-labelledby="panel-title">
+      <div class="panel-handle"></div>
+      <header class="panel-header">
+        <h2 id="panel-title">Exercises</h2>
+        <button type="button" class="panel-close" aria-label="Close">×</button>
+      </header>
+      <div class="panel-body"></div>
+    </aside>
+
+    <footer class="app-footer">
+      <span id="sw-status" class="muted">Service worker: checking…</span>
+    </footer>
   </main>
 
+  <script src="js/exercises.js"></script>
+  <script src="js/bodyDiagram.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
