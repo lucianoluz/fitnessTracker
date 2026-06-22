@@ -205,6 +205,21 @@ function pickAt(clientX, clientY) {
 
 // Distinguish a tap (select) from a drag (rotate).
 let down = null;
+
+// The browser fires a synthetic "ghost" click after a tap. On touch it can be
+// delayed and, since the tap opened the bottom sheet, it lands on the freshly
+// shown backdrop and closes it. A tap produces exactly one trailing click, so
+// swallow that one click in the capture phase. This is timing-independent: it
+// is armed by the tap and consumed by the next click, whenever it arrives.
+let eatClickUntil = 0;
+window.addEventListener('click', (e) => {
+  if (eatClickUntil && performance.now() <= eatClickUntil) {
+    eatClickUntil = 0;
+    e.stopImmediatePropagation();
+    e.preventDefault();
+  }
+}, true);
+
 renderer.domElement.addEventListener('pointerdown', (e) => {
   down = { x: e.clientX, y: e.clientY, t: performance.now() };
 });
@@ -212,13 +227,18 @@ renderer.domElement.addEventListener('pointerup', (e) => {
   if (!down) return;
   const moved = Math.hypot(e.clientX - down.x, e.clientY - down.y);
   const dt = performance.now() - down.t;
-  if (moved < 8 && dt < 500) pickAt(e.clientX, e.clientY);
+  if (moved < 8 && dt < 500) {
+    // Arm ghost-click suppression (cap is a safety net; the trailing click
+    // normally arrives within a few hundred ms and resets this immediately).
+    eatClickUntil = performance.now() + 2000;
+    pickAt(e.clientX, e.clientY);
+  }
   down = null;
 });
 
-// Fade the highlight ~1s after the sheet is closed. Panel swallows the ghost
-// click that follows the opening tap, so onClose only fires on a real close;
-// tapping another muscle cancels a pending fade (see selectMuscle).
+// Fade the highlight ~1s after the sheet is closed. The ghost click is
+// swallowed above, so onClose only fires on a real close; tapping another
+// muscle cancels a pending fade (see selectMuscle).
 Panel.onClose(() => {
   if (revertTimer) clearTimeout(revertTimer);
   revertTimer = setTimeout(() => { revertTimer = null; clearSelection(); }, 1000);
