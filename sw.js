@@ -6,7 +6,7 @@
 //  - Big, rarely-changing assets (Three.js, the 3D model, icons) → CACHE-FIRST
 //    for speed and offline use.
 // Bump CACHE_VERSION whenever the precached shell list changes.
-const CACHE_VERSION = 'wt-shell-v9';
+const CACHE_VERSION = 'wt-shell-v10';
 
 const APP_SHELL = [
   './',
@@ -15,7 +15,9 @@ const APP_SHELL = [
   './js/exercises.js',
   './js/storage.js',
   './js/panel.js',
+  './js/history.js',
   './js/body3d.js',
+  './js/nav.js',
   './js/app.js',
   './manifest.webmanifest',
   './icons/icon-192.png',

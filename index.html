@@ -23,16 +23,41 @@
       <h1>Workout Tracker</h1>
     </header>
 
-    <section class="model-screen">
-      <p class="hint">Drag to rotate the body 360°. Tap a muscle to see its exercises.</p>
-      <div id="model-container">
-        <p id="model-loading" class="muted">Loading 3D model…</p>
-      </div>
-      <p class="credit muted">
-        Model: “Free Pack – Male Base Mesh” by DuNguyn —
-        <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC&nbsp;BY&nbsp;4.0</a>
-      </p>
-    </section>
+    <div class="screens">
+      <!-- Body: the 3D muscle picker -->
+      <section class="model-screen screen" data-screen="body">
+        <p class="hint">Drag to rotate the body 360°. Tap a muscle to see its exercises.</p>
+        <div id="model-container">
+          <p id="model-loading" class="muted">Loading 3D model…</p>
+        </div>
+        <p class="credit muted">
+          Model: “Free Pack – Male Base Mesh” by DuNguyn —
+          <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC&nbsp;BY&nbsp;4.0</a>
+        </p>
+        <footer class="app-footer">
+          <span id="sw-status" class="muted">Service worker: checking…</span>
+        </footer>
+      </section>
+
+      <!-- Session: batch "today's workout" screen (built in Phase C) -->
+      <section class="session-screen screen" data-screen="session" hidden>
+        <header class="screen-header">
+          <h2 class="screen-title">Today’s Session</h2>
+        </header>
+        <div class="screen-pad">
+          <p class="muted">Batch logging is coming next. For now, log exercises from the Body tab and review them in History.</p>
+        </div>
+      </section>
+
+      <!-- History: logged sets grouped by day, drill into one exercise -->
+      <section class="history-screen screen" data-screen="history" hidden>
+        <header class="screen-header">
+          <button type="button" class="back-btn" hidden>‹ Back</button>
+          <h2 class="screen-title">History</h2>
+        </header>
+        <div class="history-body"></div>
+      </section>
+    </div>
 
     <!-- Exercise list panel (bottom sheet). Hidden until a muscle is tapped. -->
     <div class="backdrop" hidden></div>
@@ -45,15 +70,37 @@
       <div class="panel-body"></div>
     </aside>
 
-    <footer class="app-footer">
-      <span id="sw-status" class="muted">Service worker: checking…</span>
-    </footer>
+    <nav class="tabbar" role="tablist" aria-label="Sections">
+      <button type="button" class="tab" data-screen="body" role="tab" aria-selected="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="5" r="3" />
+          <path d="M12 8v8" /><path d="M8 11h8" /><path d="M9 21l3-5 3 5" />
+        </svg>
+        <span>Body</span>
+      </button>
+      <button type="button" class="tab" data-screen="session" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M10 6h10M10 12h10M10 18h10" />
+          <path d="M4 5l1.2 1.2L7.5 4" /><path d="M4 11l1.2 1.2L7.5 10" /><path d="M4 17l1.2 1.2L7.5 16" />
+        </svg>
+        <span>Session</span>
+      </button>
+      <button type="button" class="tab" data-screen="history" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 7v5l3 2" />
+        </svg>
+        <span>History</span>
+      </button>
+    </nav>
   </main>
 
   <script src="js/exercises.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/panel.js"></script>
+  <script src="js/history.js"></script>
   <script type="module" src="js/body3d.js"></script>
+  <script src="js/nav.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
