@@ -79,6 +79,11 @@ body {
 
 #model-container canvas {
   display: block;
+  /* Out of layout flow so the canvas can never drive the container's size
+     (which would create a resize feedback loop on high-DPR screens). */
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 #model-loading {
