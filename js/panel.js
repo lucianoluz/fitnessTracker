@@ -78,9 +78,10 @@ const Panel = (function () {
   }
 
   function renderExercises(muscle) {
-    const list = exercisesForMuscle(muscle);
+    const equipment = window.Storage ? Storage.getEquipment() : null;
+    const list = exercisesForMuscle(muscle, equipment);
     if (!list.length) {
-      panelBody.innerHTML = '<p class="muted">No exercises tagged to this group yet.</p>';
+      panelBody.innerHTML = '<p class="muted">No exercises for this group in the current equipment mode.</p>';
       return;
     }
     panelBody.innerHTML = list.map(renderCard).join('');

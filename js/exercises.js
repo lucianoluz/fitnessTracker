@@ -73,7 +73,15 @@ const MUSCLE_LABELS = {
   calves: 'Calves',
 };
 
-// All exercises tagged to a given muscle key, in catalog order.
-function exercisesForMuscle(muscle) {
-  return EXERCISES.filter((ex) => ex.muscles.includes(muscle));
+// All exercises tagged to a given muscle key, in catalog order. Pass an
+// optional equipment mode ('dumbbell' | 'bodyweight') to also filter by gear.
+function exercisesForMuscle(muscle, equipment) {
+  return EXERCISES.filter(
+    (ex) => ex.muscles.includes(muscle) && (!equipment || ex.equipment === equipment),
+  );
+}
+
+// Look up a single exercise by id.
+function exerciseById(id) {
+  return EXERCISES.find((ex) => ex.id === id) || null;
 }

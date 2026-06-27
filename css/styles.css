@@ -389,26 +389,8 @@ body {
   border-bottom: none;
 }
 
-.session-tick {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-}
-
-.session-check {
-  flex: none;
-  width: 20px;
-  height: 20px;
-  accent-color: var(--accent);
-}
-
 .session-ex-name {
   font-size: 0.95rem;
-}
-
-.session-ex.is-on .session-ex-name {
-  color: var(--accent);
   font-weight: 600;
 }
 
@@ -417,18 +399,19 @@ body {
   align-items: flex-end;
   gap: 8px;
   margin-top: 8px;
-  padding-left: 30px;
 }
 
 .session-foot {
   flex: none;
+  display: flex;
+  gap: 10px;
   padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
   border-top: 1px solid #21262d;
   background: var(--panel);
 }
 
 .session-save {
-  width: 100%;
+  flex: 1 1 0;
   padding: 12px;
   font-size: 1rem;
   font-weight: 600;
@@ -439,13 +422,136 @@ body {
   cursor: pointer;
 }
 
-.session-save:disabled {
+.session-save:disabled,
+.session-skip:disabled {
   opacity: 0.5;
   cursor: default;
 }
 
 .session-save.saved {
   background: #238636;
+}
+
+.session-skip {
+  flex: 0 0 auto;
+  padding: 12px 18px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  background: transparent;
+  border: 1px solid #30363d;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.session-skip.skipped {
+  color: #d29922;
+  border-color: #d29922;
+}
+
+/* Header equipment toggle (segmented control) */
+.equip-toggle {
+  display: flex;
+  gap: 0;
+  margin: 0 0 12px;
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 10px;
+  padding: 3px;
+}
+
+.equip-opt {
+  flex: 1 1 0;
+  padding: 7px 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted);
+  background: none;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.equip-opt.is-on {
+  color: #fff;
+  background: var(--accent);
+}
+
+/* Session screen plan / session selectors */
+.session-controls {
+  flex: none;
+  display: flex;
+  gap: 10px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #21262d;
+}
+
+.session-select-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1 1 0;
+  min-width: 0;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.session-select-field[hidden] {
+  display: none;
+}
+
+.session-plan-select,
+.session-session-select {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 0.95rem;
+  color: var(--text);
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+}
+
+.session-banner {
+  margin: 0 0 12px;
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.session-ex-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.session-ex-last {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.session-ex-last strong {
+  color: var(--accent);
+}
+
+.session-body .empty {
+  margin-top: 24px;
+  text-align: center;
+}
+
+/* History: session markers (completed / skipped) */
+.session-row .log-row-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.session-row.is-done .log-row-name {
+  color: #3fb950;
+}
+
+.session-row.is-skip .log-row-name {
+  color: #d29922;
 }
 
 /* --- History screen --- */
