@@ -49,6 +49,22 @@ const History = (function () {
     return `${weight}${reps}${sets}`;
   }
 
+  // A completed/skipped session marker, rendered distinctly from exercise rows.
+  // Skips are clearly labeled so they're easy to spot and count.
+  function sessionRow(entry) {
+    const skipped = entry.status === 'skipped';
+    const plan = typeof planById === 'function' ? planById(entry.planId) : null;
+    const planName = plan ? ` <span class="muted">(${escapeHtml(plan.name)})</span>` : '';
+    const label = skipped ? 'Skipped' : 'Completed';
+    const icon = skipped ? '⤼' : '✓';
+    return `<div class="log-row session-row ${skipped ? 'is-skip' : 'is-done'}">
+        <div class="log-row-main">
+          <span class="log-row-name">${icon} ${label} — ${escapeHtml(entry.sessionName || 'Session')}${planName}</span>
+        </div>
+        <button type="button" class="log-del" data-id="${escapeHtml(entry.id)}" aria-label="Delete entry">×</button>
+      </div>`;
+  }
+
   function row(primary, entry, drillId) {
     const main = drillId
       ? `<button type="button" class="log-row-main" data-ex="${escapeHtml(drillId)}">`
@@ -72,7 +88,7 @@ const History = (function () {
     bodyEl.innerHTML = byDay.map(({ day, entries }) => `
       <section class="day-block">
         <h3 class="day-heading">${escapeHtml(fmtDay(day))}</h3>
-        ${entries.map((e) => row(e.exerciseName, e, e.exerciseId)).join('')}
+        ${entries.map((e) => (e.kind === 'session' ? sessionRow(e) : row(e.exerciseName, e, e.exerciseId))).join('')}
       </section>`).join('');
   }
 
@@ -121,7 +137,8 @@ const History = (function () {
       return;
     }
     const main = e.target.closest('.log-row-main');
-    if (main && view.mode === 'days') drillInto(main.getAttribute('data-ex'));
+    const exId = main && main.getAttribute('data-ex');
+    if (exId && view.mode === 'days') drillInto(exId);
   });
 
   backBtn.addEventListener('click', () => {

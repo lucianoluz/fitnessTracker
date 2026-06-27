@@ -21,6 +21,10 @@
   <main class="shell">
     <header class="app-header">
       <h1>Workout Tracker</h1>
+      <div class="equip-toggle" role="group" aria-label="Equipment mode">
+        <button type="button" class="equip-opt" data-equip="dumbbell" aria-pressed="true">Dumbbell</button>
+        <button type="button" class="equip-opt" data-equip="bodyweight" aria-pressed="false">Bodyweight</button>
+      </div>
     </header>
 
     <div class="screens">
@@ -39,14 +43,23 @@
         </footer>
       </section>
 
-      <!-- Session: batch "today's workout" screen -->
+      <!-- Session: routine-driven "Today's Session" screen -->
       <section class="session-screen screen" data-screen="session" hidden>
         <header class="screen-header">
           <h2 class="screen-title">Today’s Session</h2>
         </header>
+        <div class="session-controls">
+          <label class="session-select-field session-plan-field">Plan
+            <select class="session-plan-select"></select>
+          </label>
+          <label class="session-select-field">Session
+            <select class="session-session-select"></select>
+          </label>
+        </div>
         <div class="session-body"></div>
         <div class="session-foot">
-          <button type="button" class="session-save" disabled>Save Session</button>
+          <button type="button" class="session-skip">Skip</button>
+          <button type="button" class="session-save">Save Session</button>
         </div>
       </section>
 
@@ -97,6 +110,7 @@
   </main>
 
   <script src="js/exercises.js"></script>
+  <script src="js/routines.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/panel.js"></script>
   <script src="js/history.js"></script>
